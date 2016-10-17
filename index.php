@@ -26,12 +26,23 @@ $('#debug').text('Ready');
 var timeout = null;
 var delay = 1000;
 var ping = function() {
-	$.post('/index.php', '', function(data, status, xhr) {
+	$.ajax({
+		method: 'post',
+		url: '/index.php',
+		data: '',
+		dataType: 'json',
+		cache: false,
+		timeout: 1000
+	})
+	.done(function(data, textStatus, jqXHR) {
 		$('#debug').text($('#debug').text() + ', ' + data.result);
 		timeout = setTimeout(function() {
 			ping();
 		}, delay);
-	}, 'json');
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		$('#debug').text($('#debug').text() + ', Failed so stopping');
+	});
 };
 $('#go').click(function() {
 	$('#go').attr('disabled', 'true');
