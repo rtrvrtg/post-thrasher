@@ -1,6 +1,6 @@
 <?php
 
-if (!empty($_POST)) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	header('Content-Type: application/json');
 	print json_encode([
 		'result' => rand(0, 999999),
@@ -26,9 +26,7 @@ $('#debug').text('Ready');
 var timeout = null;
 var delay = 1000;
 var ping = function() {
-	$.post('/index.php', {
-		foo: Math.random()
-	}, function(data, status, xhr) {
+	$.post('/index.php', '', function(data, status, xhr) {
 		$('#debug').text($('#debug').text() + ', ' + data.result);
 		timeout = setTimeout(function() {
 			ping();
